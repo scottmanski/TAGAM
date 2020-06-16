@@ -20,6 +20,8 @@
 #' @examples
 #' \dontrun{
 #'
+#' word_embeddings <- formatWordEmbeddings(embedding_matrix_example, normalize = TRUE)
+#'
 #' a <- "home"
 #' b <- "house"
 #' cs(a, b, word_embeddings)

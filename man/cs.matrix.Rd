@@ -53,6 +53,8 @@ in a similar fashion.
 require(dplyr)
 require(tidytext)
 
+word_embeddings <- formatWordEmbeddings(embedding_matrix_example, normalize = TRUE)
+
 
 sentences <- data.frame("Description" = c("Statistics is great!",
                                           "My dog is fluffy.",

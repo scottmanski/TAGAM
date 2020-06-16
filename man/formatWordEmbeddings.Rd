@@ -4,7 +4,7 @@
 \alias{formatWordEmbeddings}
 \title{Format Word Embeddings}
 \usage{
-formatWordEmbeddings(embedding_matrix, normalize = TRUE)
+formatWordEmbeddings(embedding_matrix, normalize = TRUE, verbose = TRUE)
 }
 \arguments{
 \item{embedding_matrix}{word embedding matrix. For a matrix containing information on \eqn{n} words, with
@@ -12,6 +12,8 @@ each word being represented by a \eqn{d} dimensional vector, \code{embedding_mat
 \eqn{n} rows and \eqn{d+1} columns where the first column contains the words.}
 
 \item{normalize}{logical; should the word embeddings be normalized.}
+
+\item{verbose}{logical; should the function report on progress.}
 }
 \value{
 A named list of word embeddings.
@@ -27,10 +29,13 @@ embedding for that entry's name (see examples).
 }
 \examples{
 \dontrun{
-download.file("http://nlp.stanford.edu/data/wordvecs/glove.6B.zip", "glove.6B.zip")
-unzip("glove.6B.zip")
-embedding_matrix <- read_table2("glove.6B.300d.txt", col_names = FALSE)
-word_embeddings <- formatWordEmbeddings(embedding_matrix, normalize = TRUE)
+# temp <- tempfile()
+# download.file("http://nlp.stanford.edu/data/wordvecs/glove.6B.zip", temp)
+
+# embedding_matrix <- read.table(unz(temp, "glove.6B.300d.txt"), quote = "",
+#                                comment.char = "", stringsAsFactors = FALSE)
+
+word_embeddings <- formatWordEmbeddings(embedding_matrix_example, normalize = TRUE, verbose = TRUE)
 
 # Extract the word embedding for "the"
 word_embeddings[["the"]]

@@ -35,6 +35,8 @@
 #' require(dplyr)
 #' require(tidytext)
 #'
+#' word_embeddings <- formatWordEmbeddings(embedding_matrix_example, normalize = TRUE)
+#'
 #'
 #' sentences <- data.frame("Description" = c("Statistics is great!",
 #'                                           "My dog is fluffy.",
@@ -50,7 +52,7 @@
 
 cs.matrix <- function(x, words, word_embeddings, method = "max", parallel = FALSE, n.cluster = NULL, sparse = FALSE) {
   if (missing(word_embeddings)) {
-    stop("No word_embeddings found. Be sure to run download.GloVe")
+    stop("word_embeddings not specified")
   }
   i <- NULL
   lines <- unique(x$line)
@@ -63,7 +65,7 @@ cs.matrix <- function(x, words, word_embeddings, method = "max", parallel = FALS
   all_words <- unique(c(x$word, words))
 
   if (mean(all_words %in% names(word_embeddings)) != 1) {
-    warning(all_words[which(!all_words %in% names(word_embeddings))], " not in word_embeddings and was removed from all_words")
+    warning(paste(all_words[which(!all_words %in% names(word_embeddings))], collapse = ", "), " not in word_embeddings and removed from all_words")
     all_words <- all_words[which(all_words %in% names(word_embeddings))]
   }
 

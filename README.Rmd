@@ -1,0 +1,69 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# TAGAM
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of TAGAM is to streamline the use of word embeddings in text analysis.  The package is
+designed to take raw textual descriptions and transform the information for use in your analysis.  The package also includes functions for running the generalized additive model framework described in XXX.
+
+## Installation
+
+You can install the development version from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("scottmanski/TAGAM")
+```
+## Example
+
+This is a basic example which shows you how to solve a common problem:
+
+```{r format.word.embeddings, eval = FALSE}
+library(TAGAM)
+temp <- tempfile()
+download.file("http://nlp.stanford.edu/data/wordvecs/glove.6B.zip", temp)
+
+embedding_matrix <- read.table(unz(temp, "glove.6B.300d.txt"), quote = "",
+                               comment.char = "", stringsAsFactors = FALSE)
+word_embeddings <- formatWordEmbeddings(embedding_matrix, normalize = TRUE)
+```
+
+```{r cosine similarity}
+library(TAGAM)
+a <- "statistic"
+b <- "statistics"
+cs(a, b, word_embeddings_subset)
+```
+
+
+```{r cs documents}
+library(tidyverse)
+library(tidytext)
+D <- c("Statistics is great!",
+       "My dog is fluffy",
+       "What is your favorite class?")
+x <- tibble(line = 1:length(D), text = D) %>%
+  unnest_tokens(word, text)
+
+w <- c("statistics", "dog", "fluffy", "favorite", "class")
+
+cs.matrix(x, words = w, word_embeddings_subset)
+```
+
+
+

@@ -6,6 +6,7 @@ Author: Who wrote it
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
+Depends: R (>= 2.10)
 License: GPL-2
 Imports:
 	doParallel,
@@ -16,8 +17,8 @@ Imports:
 	Matrix,
 	dplyr,
 	tidytext,
-	readr,
 	utils,
 	stats
 Encoding: UTF-8
 LazyData: true
+RoxygenNote: 7.0.2
