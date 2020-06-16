@@ -72,6 +72,7 @@ gam3 <- function(formula, data, gam.function = "gam",
 
   bs <- as.integer(as.numeric(table(group)))
 
+
   stage1.cv <- cv.gglasso2(x = Design, y = unlist(data[gp$response]),
                            group = group, nfolds = nfolds[1],
                            pred.loss = pred.loss, loss = loss,
@@ -111,6 +112,9 @@ gam3 <- function(formula, data, gam.function = "gam",
                         intercept = intercept,
                         lambda = stage2.cv$lambda.min)
 
+  if (loss == "logit") {
+    gp$response <- (gp$response + 1)/2
+  }
 
   message("Starting stage 3")
 
