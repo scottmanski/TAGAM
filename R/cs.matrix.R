@@ -7,6 +7,7 @@
 #' that the word from the 'word' column appears in.  See 'Examples'.
 #' @param words a character vector of words that will represent the columns of the resulting matrix.
 #' @param word_embeddings named list of word embeddings.  See \code{\link{formatWordEmbeddings}}.
+#' @param epsilon numeric in [0, 1], any cosine similarity below this value will be set to zereo.
 #' @param method function to apply across each column.  Options include \code{c("max", "sum", "mean")}.
 #' @param parallel logical, indicating if the matrix should be calculated in parallel.
 #' @param n.cluster integer, the number of clusters to use if \code{parallel=TRUE}.
@@ -46,11 +47,14 @@
 #'   unnest_tokens(word, text)
 #'
 #' cs.matrix(x, words = c("stats", "cat"), word_embeddings)
+#'
+#'
+#' cs.matrix(x, words = c("stats", "cat"), word_embeddings, epsilon = 0.3, sparse = TRUE)
 #' }
 #'
 #' @export
 
-cs.matrix <- function(x, words, word_embeddings, method = "max", parallel = FALSE, n.cluster = NULL, sparse = FALSE) {
+cs.matrix <- function(x, words, word_embeddings, epsilon = NULL, method = "max", parallel = FALSE, n.cluster = NULL, sparse = FALSE) {
   if (missing(word_embeddings)) {
     stop("word_embeddings not specified")
   }
@@ -86,6 +90,10 @@ cs.matrix <- function(x, words, word_embeddings, method = "max", parallel = FALS
 
   CS.Mat <- do.call(rbind, mat)
   colnames(CS.Mat) <- words
+
+  if (!is.null(epsilon)) {
+    CS.Mat <- ifelse(CS.Mat < epsilon, 0, CS.Mat)
+  }
 
   return(Matrix::Matrix(CS.Mat, sparse = sparse))
 }
