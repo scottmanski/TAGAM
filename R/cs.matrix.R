@@ -60,6 +60,7 @@ cs.matrix <- function(x, words, word_embeddings, epsilon = NULL, method = "max",
   }
   i <- NULL
   lines <- unique(x$line)
+  null.lines <- (1:max(lines))[!(1:max(lines)) %in% lines]
 
   if (parallel == TRUE & is.null(n.cluster)) {
     parallel <- FALSE
@@ -89,6 +90,9 @@ cs.matrix <- function(x, words, word_embeddings, epsilon = NULL, method = "max",
   }
 
   CS.Mat <- do.call(rbind, mat)
+  null.mat <- matrix(-1, nrow = length(null.lines), ncol = ncol(CS.Mat))
+  line.order <- order(c(lines, null.lines))
+  CS.Mat <- rbind(CS.Mat, null.mat)[line.order, ]
   colnames(CS.Mat) <- words
 
   if (!is.null(epsilon)) {
