@@ -72,6 +72,10 @@ gam3 <- function(formula, data, gam.function = "gam",
 
   bs <- as.integer(as.numeric(table(group)))
 
+  if (loss == "logit") {
+    data[gp$response] <- data[gp$response]*2/diff(range(data[gp$response]))
+    data[gp$response] <- data[gp$response]-mean(range(data[gp$response]))
+  }
 
   stage1.cv <- cv.gglasso2(x = Design, y = unlist(data[gp$response]),
                            group = group, nfolds = nfolds[1],
@@ -112,8 +116,9 @@ gam3 <- function(formula, data, gam.function = "gam",
                         intercept = intercept,
                         lambda = stage2.cv$lambda.min)
 
-  if (loss == "logit") {
-    gp$response <- (gp$response + 1)/2
+  if (family$family == "binomial") {
+    data[gp$response] <- data[gp$response]/diff(range(data[gp$response]))
+    data[gp$response] <- data[gp$response] - mean(range(data[gp$response])) + 0.5
   }
 
   message("Starting stage 3")
