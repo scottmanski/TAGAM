@@ -70,7 +70,14 @@
   </ul>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/scottmanski/TAGAM/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -88,45 +95,43 @@
 </h1></div>
 <!-- badges: start -->
 <!-- badges: end -->
-<p>The goal of TAGAM is to streamline the use of word embeddings in text analysis. The package is designed to take raw textual descriptions and transform the information for use in your analysis. The package also includes functions for running the generalized additive model framework described in XXX.</p>
+<p>The goal of TAGAM is to streamline the use of word embeddings in text analysis. The package is designed to take raw textual descriptions and transform the information for use in your analysis. The package also includes functions for running a three stage generalized additive model framework.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install the development version from <a href="https://github.com/">GitHub</a> with:</p>
+<p>You can install the development version from <a href="https://github.com/scottmanski/TAGAM">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="r"><span class="co"># install.packages("devtools")</span>
 <span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"scottmanski/TAGAM"</span>)</pre></div>
 </div>
-<div id="example" class="section level2">
+<div id="text-conversion" class="section level2">
 <h2 class="hasAnchor">
-<a href="#example" class="anchor"></a>Example</h2>
-<p>This is a basic example which shows you how to solve a common problem:</p>
+<a href="#text-conversion" class="anchor"></a>Text Conversion</h2>
+<p>To convert the words to vectors, we must download and format the word embeddings. Here, we choose to use the 300 dimensional <a href="https://nlp.stanford.edu/projects/glove/">GloVe</a> word embeddings. The <code><a href="reference/formatWordEmbeddings.html">TAGAM::formatWordEmbeddings</a></code> function takes the raw word embeddings matrix and converts them into a named list, where each entry is a numeric vector of length 300. For example, we would use <code>word_embeddings["the"]</code> to extract the numeric vector for the word <em>the</em>.</p>
 <div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">TAGAM</span>)
 <span class="no">temp</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempfile</a></span>()
 <span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span>(<span class="st">"http://nlp.stanford.edu/data/wordvecs/glove.6B.zip"</span>, <span class="no">temp</span>)
 
 <span class="no">embedding_matrix</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.table</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/connections.html">unz</a></span>(<span class="no">temp</span>, <span class="st">"glove.6B.300d.txt"</span>), <span class="kw">quote</span> <span class="kw">=</span> <span class="st">""</span>,
                                <span class="kw">comment.char</span> <span class="kw">=</span> <span class="st">""</span>, <span class="kw">stringsAsFactors</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
-<span class="no">word_embeddings</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/formatWordEmbeddings.html">formatWordEmbeddings</a></span>(<span class="no">embedding_matrix</span>, <span class="kw">normalize</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></div>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">TAGAM</span>)
-
-<span class="no">word_embeddings</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/formatWordEmbeddings.html">formatWordEmbeddings</a></span>(<span class="no">embedding_matrix_example</span>, <span class="kw">normalize</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">verbose</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+<span class="no">word_embeddings</span> <span class="kw">&lt;-</span> <span class="kw pkg">TAGAM</span><span class="kw ns">::</span><span class="fu"><a href="reference/formatWordEmbeddings.html">formatWordEmbeddings</a></span>(<span class="no">embedding_matrix</span>, <span class="kw">normalize</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></div>
+</div>
+<div id="cosine-similarity" class="section level2">
+<h2 class="hasAnchor">
+<a href="#cosine-similarity" class="anchor"></a>Cosine Similarity</h2>
+<p>To measure the similarity between two words, we use the cosine similarity between the vector representations of the words. That is, for two words with vector representations <span class="math inline">$\bf{a}$</span> and <span class="math inline">$\bf{b}$</span>, respectively, the cosine similarity is defined as, <br><span class="math display">$$\textrm{sim}_{\textrm{cos}} ({\bf a}, {\bf b}) = \frac{{\bf a}\cdot {\bf b}}{\lVert {\bf a}\lVert_2\cdot\lVert{\bf b}\lVert_2}.$$</span><br></p>
+<div class="sourceCode" id="cb3"><pre class="r"><span class="no">word_embeddings</span> <span class="kw">&lt;-</span> <span class="kw pkg">TAGAM</span><span class="kw ns">::</span><span class="fu"><a href="reference/formatWordEmbeddings.html">formatWordEmbeddings</a></span>(<span class="no">embedding_matrix_example</span>, <span class="kw">normalize</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">verbose</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
 <span class="co">#&gt; Normalizing word embeddings.</span>
 <span class="co">#&gt; Formatting word embeddings.</span>
 
 <span class="no">a</span> <span class="kw">&lt;-</span> <span class="st">"statistic"</span>
 <span class="no">b</span> <span class="kw">&lt;-</span> <span class="st">"statistics"</span>
-<span class="fu"><a href="reference/cs.html">cs</a></span>(<span class="no">a</span>, <span class="no">b</span>, <span class="no">word_embeddings</span>)
+<span class="kw pkg">TAGAM</span><span class="kw ns">::</span><span class="fu"><a href="reference/cs.html">cs</a></span>(<span class="no">a</span>, <span class="no">b</span>, <span class="no">word_embeddings</span>)
 <span class="co">#&gt;            statistic</span>
 <span class="co">#&gt; statistics 0.6047858</span></pre></div>
+<p>For a given phrase, let <span class="math inline">$D = ({\bf b}_1, ..., {\bf b}_S)$</span> where each <span class="math inline">${\bf b}_i$</span>, <span class="math inline"><em>i</em> ∈ {1, ..., <em>S</em>}</span> is a word in the phrase. Then define the cosine similarity between a word <span class="math inline">$\bf a$</span> and a phrase <span class="math inline"><em>D</em></span> as <br><span class="math display">$$\textrm{sim}_{\textrm{cos}} ({\bf a}, D) = \underset{s=1,...,S}{\max}\left\{ \textrm{sim}_{\textrm{cos}} ({\bf a}, {\bf b}_s)\right\}.$$</span><br></p>
+<p>In this way, we construct a matrix of cosine similarities <span class="math inline"><strong>X</strong><sub><em>n</em> × <em>p</em><sub><em>n</em></sub></sub></span> where <span class="math inline"><em>n</em></span> is the number of observations, <span class="math inline"><em>p</em><sub><em>n</em></sub></span> is the number of unique words used. Let <span class="math inline"><em>W</em></span> be the vector of unique words with length <span class="math inline"><em>p</em><sub><em>n</em></sub></span>, and let <span class="math inline"><strong>D</strong></span> be the list of descriptions with length <span class="math inline"><em>n</em></span>, where each element in the list is a vector <span class="math inline"><em>D</em><sub><em>i</em></sub></span> containing the words used in description <span class="math inline"><em>i</em></span>. Then <br><span class="math display"><em>X</em><sub><em>i</em><em>j</em></sub> = sim<sub>cos</sub>(<em>W</em><sub><em>j</em></sub>, <em>D</em><sub><em>i</em></sub>)    for    <em>i</em> ∈ {1, ..., <em>n</em>}, <em>j</em> ∈ {1, ..., <em>p</em><sub><em>n</em></sub>}.</span><br></p>
+<p>Each value in the matrix is now continuous and restricted to <span class="math inline">[ − 1, 1]</span>.</p>
 <div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">tidyverse</span>)
-<span class="co">#&gt; ── Attaching packages ─────────────────────────────────────────────────────────── tidyverse 1.3.0 ──</span>
-<span class="co">#&gt; ✓ ggplot2 3.3.1     ✓ purrr   0.3.4</span>
-<span class="co">#&gt; ✓ tibble  3.0.1     ✓ dplyr   1.0.0</span>
-<span class="co">#&gt; ✓ tidyr   1.0.0     ✓ stringr 1.4.0</span>
-<span class="co">#&gt; ✓ readr   1.3.1     ✓ forcats 0.4.0</span>
-<span class="co">#&gt; ── Conflicts ────────────────────────────────────────────────────────────── tidyverse_conflicts() ──</span>
-<span class="co">#&gt; x dplyr::filter() masks stats::filter()</span>
-<span class="co">#&gt; x dplyr::lag()    masks stats::lag()</span>
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">tidytext</span>)
 <span class="no">D</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Statistics is great!"</span>,
        <span class="st">"My dog is fluffy"</span>,
@@ -136,7 +141,7 @@
 
 <span class="no">w</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"statistics"</span>, <span class="st">"dog"</span>, <span class="st">"fluffy"</span>, <span class="st">"favorite"</span>, <span class="st">"class"</span>)
 
-<span class="fu"><a href="reference/cs.matrix.html">cs.matrix</a></span>(<span class="no">x</span>, <span class="kw">words</span> <span class="kw">=</span> <span class="no">w</span>, <span class="no">word_embeddings</span>)
+<span class="kw pkg">TAGAM</span><span class="kw ns">::</span><span class="fu"><a href="reference/cs.matrix.html">cs.matrix</a></span>(<span class="no">x</span>, <span class="kw">words</span> <span class="kw">=</span> <span class="no">w</span>, <span class="no">word_embeddings</span>)
 <span class="co">#&gt; 3 x 5 Matrix of class "dgeMatrix"</span>
 <span class="co">#&gt;      statistics       dog     fluffy  favorite     class</span>
 <span class="co">#&gt; [1,]  1.0000000 0.2670640 0.01818783 0.3341204 0.2700382</span>
@@ -147,7 +152,16 @@
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <div class="license">
+    <div class="links">
+<h2>Links</h2>
+<ul class="list-unstyled">
+<li>Browse source code at <br><a href="https://github.com/scottmanski/TAGAM/">https://​github.com/​scottmanski/​TAGAM/​</a>
+</li>
+<li>Report a bug at <br><a href="https://github.com/scottmanski/TAGAM/issues">https://​github.com/​scottmanski/​TAGAM/​issues</a>
+</li>
+</ul>
+</div>
+<div class="license">
 <h2>License</h2>
 <ul class="list-unstyled">
 <li><a href="https://www.r-project.org/Licenses/GPL-2">GPL-2</a></li>
