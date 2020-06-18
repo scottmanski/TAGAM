@@ -82,9 +82,10 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="tagam" class="section level1">
+<div id="tagam-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#tagam" class="anchor"></a>TAGAM</h1></div>
+<a href="#tagam-" class="anchor"></a>TAGAM <img src="reference/figures/logo.png" align="right" alt="" width="120">
+</h1></div>
 <!-- badges: start -->
 <!-- badges: end -->
 <p>The goal of TAGAM is to streamline the use of word embeddings in text analysis. The package is designed to take raw textual descriptions and transform the information for use in your analysis. The package also includes functions for running the generalized additive model framework described in XXX.</p>
@@ -107,18 +108,23 @@
                                <span class="kw">comment.char</span> <span class="kw">=</span> <span class="st">""</span>, <span class="kw">stringsAsFactors</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 <span class="no">word_embeddings</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/formatWordEmbeddings.html">formatWordEmbeddings</a></span>(<span class="no">embedding_matrix</span>, <span class="kw">normalize</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></div>
 <div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">TAGAM</span>)
-<span class="no">a</span> <span class="kw">&lt;-</span> <span class="st">"home"</span>
-<span class="no">b</span> <span class="kw">&lt;-</span> <span class="st">"house"</span>
-<span class="fu"><a href="reference/cs.html">cs</a></span>(<span class="no">a</span>, <span class="no">b</span>, <span class="no">word_embeddings_subset</span>)
-<span class="co">#&gt;            home</span>
-<span class="co">#&gt; house 0.5005335</span></pre></div>
+
+<span class="no">word_embeddings</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/formatWordEmbeddings.html">formatWordEmbeddings</a></span>(<span class="no">embedding_matrix_example</span>, <span class="kw">normalize</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">verbose</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+<span class="co">#&gt; Normalizing word embeddings.</span>
+<span class="co">#&gt; Formatting word embeddings.</span>
+
+<span class="no">a</span> <span class="kw">&lt;-</span> <span class="st">"statistic"</span>
+<span class="no">b</span> <span class="kw">&lt;-</span> <span class="st">"statistics"</span>
+<span class="fu"><a href="reference/cs.html">cs</a></span>(<span class="no">a</span>, <span class="no">b</span>, <span class="no">word_embeddings</span>)
+<span class="co">#&gt;            statistic</span>
+<span class="co">#&gt; statistics 0.6047858</span></pre></div>
 <div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">tidyverse</span>)
-<span class="co">#&gt; ── Attaching packages ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.3.0 ──</span>
-<span class="co">#&gt; ✓ ggplot2 3.3.1     ✓ purrr   0.3.3</span>
-<span class="co">#&gt; ✓ tibble  3.0.1     ✓ dplyr   0.8.3</span>
+<span class="co">#&gt; ── Attaching packages ─────────────────────────────────────────────────────────── tidyverse 1.3.0 ──</span>
+<span class="co">#&gt; ✓ ggplot2 3.3.1     ✓ purrr   0.3.4</span>
+<span class="co">#&gt; ✓ tibble  3.0.1     ✓ dplyr   1.0.0</span>
 <span class="co">#&gt; ✓ tidyr   1.0.0     ✓ stringr 1.4.0</span>
 <span class="co">#&gt; ✓ readr   1.3.1     ✓ forcats 0.4.0</span>
-<span class="co">#&gt; ── Conflicts ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──</span>
+<span class="co">#&gt; ── Conflicts ────────────────────────────────────────────────────────────── tidyverse_conflicts() ──</span>
 <span class="co">#&gt; x dplyr::filter() masks stats::filter()</span>
 <span class="co">#&gt; x dplyr::lag()    masks stats::lag()</span>
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">tidytext</span>)
@@ -130,7 +136,7 @@
 
 <span class="no">w</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"statistics"</span>, <span class="st">"dog"</span>, <span class="st">"fluffy"</span>, <span class="st">"favorite"</span>, <span class="st">"class"</span>)
 
-<span class="fu"><a href="reference/cs.matrix.html">cs.matrix</a></span>(<span class="no">x</span>, <span class="kw">words</span> <span class="kw">=</span> <span class="no">w</span>, <span class="no">word_embeddings_subset</span>)
+<span class="fu"><a href="reference/cs.matrix.html">cs.matrix</a></span>(<span class="no">x</span>, <span class="kw">words</span> <span class="kw">=</span> <span class="no">w</span>, <span class="no">word_embeddings</span>)
 <span class="co">#&gt; 3 x 5 Matrix of class "dgeMatrix"</span>
 <span class="co">#&gt;      statistics       dog     fluffy  favorite     class</span>
 <span class="co">#&gt; [1,]  1.0000000 0.2670640 0.01818783 0.3341204 0.2700382</span>
