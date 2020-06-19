@@ -61,7 +61,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/NOAA-Example.html">NOAA Example</a>
+      <a href="../articles/NOAA-Example.html">NOAA Storm Event Analysis</a>
     </li>
     <li>
       <a href="../articles/Spam-Example.html">SMS Spam Filtering Example</a>
@@ -111,7 +111,6 @@
 <div id="data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#data" class="anchor"></a>Data</h2>
-<p>As previously mentioned, we will gather the data using the <code>rnoaa</code> package. The following code gathers and combines data from 2000 to 2018.</p>
 <p>As previously mentioned, we will download data from <a href="https://archive.ics.uci.edu/ml/index.php">UCI Machine Learning Repository</a>.</p>
 <div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">temp</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempfile</a></span>()
 <span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span>(<span class="st">"https://archive.ics.uci.edu/ml/machine-learning-databases/00228/smsspamcollection.zip"</span>, <span class="no">temp</span>)
@@ -127,8 +126,6 @@
 
 <span class="no">testing</span> <span class="kw">&lt;-</span> <span class="no">spam</span>[-<span class="no">samp</span>, ]
 <span class="no">y_testing</span> <span class="kw">&lt;-</span> <span class="no">spam</span>$<span class="no">spam</span>[-<span class="no">samp</span>]</pre></body></html></div>
-<p>For the analysis, we use observations resulting from <em>Thunderstorm Wind</em> that occured in <em>Michigan</em>. We also remove all observations that don’t have an <em>event_narrative</em>. Finally, in order to remove empty values and data entry errors, we only take observations with <code>nchar(damage_property) &gt; 1</code>.</p>
-<p>After filtering the data, we see the dollar amounts in <code>noaa_subset$damage_property</code> may contain <em>K</em>, <em>M</em>, or <em>B</em> to represent thousands, millions, or billions of dollars respectively. The following code creates <code>noaa_subset$damage_property_num</code> which contains the numeric value represented in <code>noaa_subset$damage_property</code>. Finally, we take only the observations resulting in positive property loss.</p>
 </div>
 <div id="text-conversion" class="section level2">
 <h2 class="hasAnchor">
@@ -138,9 +135,6 @@
 <span class="co"># unzip("glove.6B.zip")</span>
 <span class="no">embedding_matrix</span> <span class="kw">&lt;-</span> <span class="fu">read_table2</span>(<span class="st">"glove.6B.300d.txt"</span>, <span class="kw">col_names</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 <span class="no">word_embeddings</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/formatWordEmbeddings.html">formatWordEmbeddings</a></span>(<span class="no">embedding_matrix</span>, <span class="kw">normalize</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></body></html></div>
-<p>To measure the similarity between two words, we use the cosine similarity between the vector representations of the words. That is, for two words with vector representations <span class="math inline">\(\bf{a}\)</span> and <span class="math inline">\(\bf{b}\)</span>, respectively, the cosine similarity is defined as, <span class="math display">\[\textrm{sim}_{\textrm{cos}} ({\bf a}, {\bf b}) = \frac{{\bf a}\cdot {\bf b}}{\lVert {\bf a}\lVert_2\cdot\lVert{\bf b}\lVert_2}.\]</span> Moreover, for a given phrase, let <span class="math inline">\(D = ({\bf b}_1, ..., {\bf b}_S)\)</span> where each <span class="math inline">\({\bf b}_i\)</span>, <span class="math inline">\(i \in \{1, ..., S\}\)</span> is a word in the phrase. Then define the cosine similarity between a word <span class="math inline">\(\bf a\)</span> and a phrase <span class="math inline">\(D\)</span> as <span class="math display">\[\textrm{sim}_{\textrm{cos}} ({\bf a}, D) = \underset{s=1,...,S}{\max}\left( \textrm{sim}_{\textrm{cos}} ({\bf a}, {\bf b}_s)\right).\]</span></p>
-<p>In this way, we construct a matrix of cosine similarities <span class="math inline">\(\boldsymbol X _{n\times p_n}\)</span> where <span class="math inline">\(n\)</span> is the number of observations, <span class="math inline">\(p_n\)</span> is the number of unique words used. Let <span class="math inline">\(W\)</span> be the vector of unique words with length <span class="math inline">\(p_n\)</span>, and let <span class="math inline">\(\boldsymbol D\)</span> be the list of descriptions with length <span class="math inline">\(n\)</span>, where each element in the list is a vector <span class="math inline">\(D_i\)</span> containing the words used in description <span class="math inline">\(i\)</span>. Then <span class="math display">\[X_{ij} = \textrm{sim}_{\textrm{cos}} ({W_j}, D_i) \,\,\,\textrm{ for }\,\,\, i \in \{1,...,n\}, \,j \in \{1,...,p_n\}.\]</span></p>
-<p>Each value in the matrix is now continuous and restricted to <span class="math inline">\([-1, 1]\)</span>.</p>
 <p><code>cs.matrix</code> is used to construct the cosine similarity matrix from the word embeddings. In order to use <code>cs.matrix</code>, the descriptions need to be reformatted into a tibble with columns <em>line</em> and <em>word</em>. This can be done using the <code>tidytext</code> package,</p>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">tidy_training</span> <span class="kw">&lt;-</span> <span class="fu">tibble</span>(<span class="kw">line</span> <span class="kw">=</span> <span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">training</span>), <span class="kw">text</span> <span class="kw">=</span> <span class="no">training</span>$<span class="no">text</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/pkg/tidytext/man/unnest_tokens.html">unnest_tokens</a></span>(<span class="no">word</span>, <span class="no">text</span>) <span class="kw">%&gt;%</span>
@@ -266,7 +260,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by The package maintainer.</p>
+  <p>Developed by Scott Manski.</p>
 </div>
 
 <div class="pkgdown">

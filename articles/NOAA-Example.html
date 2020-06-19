@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NOAA Example • TAGAM</title>
+<title>NOAA Storm Event Analysis • TAGAM</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -17,7 +17,7 @@
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="NOAA Example">
+<script src="../pkgdown.js"></script><meta property="og:title" content="NOAA Storm Event Analysis">
 <meta property="og:description" content="TAGAM">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -61,7 +61,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/NOAA-Example.html">NOAA Example</a>
+      <a href="../articles/NOAA-Example.html">NOAA Storm Event Analysis</a>
     </li>
     <li>
       <a href="../articles/Spam-Example.html">SMS Spam Filtering Example</a>
@@ -89,7 +89,7 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>NOAA Example</h1>
+      <h1 data-toc-skip>NOAA Storm Event Analysis</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/scottmanski/TAGAM/blob/master/vignettes/NOAA-Example.Rmd"><code>vignettes/NOAA-Example.Rmd</code></a></small>
@@ -153,10 +153,7 @@
 <span class="co"># unzip("glove.6B.zip")</span>
 <span class="no">embedding_matrix</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_table.html">read_table2</a></span>(<span class="st">"glove.6B.300d.txt"</span>, <span class="kw">col_names</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 <span class="no">word_embeddings</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/formatWordEmbeddings.html">formatWordEmbeddings</a></span>(<span class="no">embedding_matrix</span>, <span class="kw">normalize</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></body></html></div>
-<p>To measure the similarity between two words, we use the cosine similarity between the vector representations of the words. That is, for two words with vector representations <span class="math inline">\(\bf{a}\)</span> and <span class="math inline">\(\bf{b}\)</span>, respectively, the cosine similarity is defined as, <span class="math display">\[\textrm{sim}_{\textrm{cos}} ({\bf a}, {\bf b}) = \frac{{\bf a}\cdot {\bf b}}{\lVert {\bf a}\lVert_2\cdot\lVert{\bf b}\lVert_2}.\]</span> Moreover, for a given phrase, let <span class="math inline">\(D = ({\bf b}_1, ..., {\bf b}_S)\)</span> where each <span class="math inline">\({\bf b}_i\)</span>, <span class="math inline">\(i \in \{1, ..., S\}\)</span> is a word in the phrase. Then define the cosine similarity between a word <span class="math inline">\(\bf a\)</span> and a phrase <span class="math inline">\(D\)</span> as <span class="math display">\[\textrm{sim}_{\textrm{cos}} ({\bf a}, D) = \underset{s=1,...,S}{\max}\left( \textrm{sim}_{\textrm{cos}} ({\bf a}, {\bf b}_s)\right).\]</span></p>
-<p>In this way, we construct a matrix of cosine similarities <span class="math inline">\(\boldsymbol X _{n\times p_n}\)</span> where <span class="math inline">\(n\)</span> is the number of observations, <span class="math inline">\(p_n\)</span> is the number of unique words used. Let <span class="math inline">\(W\)</span> be the vector of unique words with length <span class="math inline">\(p_n\)</span>, and let <span class="math inline">\(\boldsymbol D\)</span> be the list of descriptions with length <span class="math inline">\(n\)</span>, where each element in the list is a vector <span class="math inline">\(D_i\)</span> containing the words used in description <span class="math inline">\(i\)</span>. Then <span class="math display">\[X_{ij} = \textrm{sim}_{\textrm{cos}} ({W_j}, D_i) \,\,\,\textrm{ for }\,\,\, i \in \{1,...,n\}, \,j \in \{1,...,p_n\}.\]</span></p>
-<p>Each value in the matrix is now continuous and restricted to <span class="math inline">\([-1, 1]\)</span>.</p>
-<p><code>cs.matrix</code> is used to construct the cosine similarity matrix from the word embeddings. In order to use <code>cs.matrix</code>, the descriptions need to be reformatted into a tibble with columns <em>line</em> and <em>word</em>. This can be done using the <code>tidytext</code> package,</p>
+<p><code><a href="../reference/cs.matrix.html">TAGAM::cs.matrix</a></code> is used to construct the cosine similarity matrix from the word embeddings. In order to use <code><a href="../reference/cs.matrix.html">TAGAM::cs.matrix</a></code>, the descriptions need to be reformatted into a tibble with columns <em>line</em> and <em>word</em>. This can be done using the <code>tidytext</code> package,</p>
 <div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">tidy_training</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/reexports.html">tibble</a></span>(<span class="kw">line</span> <span class="kw">=</span> <span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">training_raw</span>), <span class="kw">text</span> <span class="kw">=</span> <span class="no">training_raw</span>) <span class="kw">%&gt;%</span>
     <span class="fu"><a href="https://rdrr.io/pkg/tidytext/man/unnest_tokens.html">unnest_tokens</a></span>(<span class="no">word</span>, <span class="no">text</span>)
 
@@ -194,9 +191,15 @@
 <span class="co">#&gt; lambda.factor changed to 0.00174752840000769</span>
 <span class="co">#&gt; Starting stage 2</span>
 <span class="co">#&gt; Starting stage 3</span></pre></body></html></div>
+</div>
+<div id="model-prediction" class="section level2">
+<h2 class="hasAnchor">
+<a href="#model-prediction" class="anchor"></a>Model Prediction</h2>
 <div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">validation_data</span>$<span class="no">prediction</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">gam3.mod</span>, <span class="kw">newdata</span> <span class="kw">=</span> <span class="no">validation_data</span>)
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="no">validation_data</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">validation_data</span>$<span class="no">y</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">validation_data</span>$<span class="no">prediction</span>))
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">validation_data</span>$<span class="no">y</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">validation_data</span>$<span class="no">prediction</span>)) +
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_abline</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">intercept</span> <span class="kw">=</span> <span class="fl">0</span>, <span class="kw">slope</span> <span class="kw">=</span> <span class="fl">1</span>)) +
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="st">"log(loss)"</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="st">"Predicted log(loss)"</span>)
 <span class="co">#&gt; Warning: Use of `validation_data$y` is discouraged. Use `y` instead.</span>
 <span class="co">#&gt; Warning: Use of `validation_data$prediction` is discouraged. Use `prediction`</span>
 <span class="co">#&gt; instead.</span></pre></body></html></div>
@@ -215,7 +218,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by The package maintainer.</p>
+  <p>Developed by Scott Manski.</p>
 </div>
 
 <div class="pkgdown">
