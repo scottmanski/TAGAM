@@ -116,10 +116,10 @@ gam3 <- function(formula, data, gam.function = "gam",
                         intercept = intercept,
                         lambda = stage2.cv$lambda.min)
 
-  if (family$family == "binomial") {
-    data[gp$response] <- data[gp$response]/diff(range(data[gp$response]))
-    data[gp$response] <- data[gp$response] - mean(range(data[gp$response])) + 0.5
-  }
+  # if (family$family == "binomial") {
+  #   data[gp$response] <- data[gp$response]/diff(range(data[gp$response]))
+  #   data[gp$response] <- data[gp$response] - mean(range(data[gp$response])) + 0.5
+  # }
 
   message("Starting stage 3")
 
